@@ -1,15 +1,14 @@
 # Simple progress bar and spinner function wrappers
-___
 
 ## Introduction
-___
 To wrap a function with progress bar, specify the number of iterations with **total** argument. The function must
 **yield** a value to increment progress by that value or None to increment by 1. The function may return a value.
 
 To wrap a function with spinner, there is no need to modify function in any way, just use **spinner** decorator. 
 
+--- 
+
 ## Examples
-___
 Simplest progress bar:
 ```python
 from progress import progress
@@ -67,7 +66,6 @@ class ExampleClassMethod:
 ```
 
 ## Customization
-___
 Customizable attributes for progress bar:
 ```python
 fill: str = '#'
