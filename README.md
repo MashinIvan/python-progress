@@ -1,12 +1,6 @@
 # Simple progress bar and spinner function wrappers
 ___
 
-## Install
-___
-```bash
-pip install python-progress
-```
-
 ## Introduction
 ___
 To wrap a function with progress bar, specify the number of iterations with **total** argument. The function must
