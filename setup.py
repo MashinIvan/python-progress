@@ -1,9 +1,9 @@
 from distutils.core import setup
 
 setup(
-    name='python-function',
+    name='progress',
     version='0.1.0',
-    packages=['python-function'],
+    packages=['progress'],
     license='MIT',
     description="Simple function bar and spinner function wrappers",
     author='Mashin Ivan',
