@@ -15,4 +15,4 @@ for handler in logging.root.handlers:
 
 
 def get_logger() -> logging.Logger:
-    return logging.getLogger("progress")
+    return logging.getLogger("python-progress")
