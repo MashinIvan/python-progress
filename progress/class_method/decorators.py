@@ -1,15 +1,15 @@
-from progress.progress import Progress, ProgressWithTime
-
 import functools
 import typing
 import time
+
+from progress.classes.progress import Progress, ProgressWithTime
 
 
 def progress(
         *,
         total: str = None,
         estimate_time: bool = False,
-        end: str = '\r',
+        same_line: bool = True,
         length: int = 30,
         fill: str = '#',
         empty: str = ' ',
@@ -23,10 +23,10 @@ def progress(
 
         @functools.wraps(func)
         def wrapper_default(self, *args, **kwargs) -> typing.Any:
-            progress_obj = Progress(getattr(self, total), end, length, fill, empty)
+            progress_obj = Progress(getattr(self, total), same_line, length, fill, empty)
 
             generator = func(self, *args, **kwargs)
-            progress_obj.print()
+            progress_obj.print(same_line=False)
             try:
                 while True:
                     increment = next(generator)
@@ -41,10 +41,10 @@ def progress(
 
         @functools.wraps(func)
         def wrapper_time_estimate(self, *args, **kwargs) -> typing.Any:
-            progress_obj = ProgressWithTime(getattr(self, total), end, length, fill, empty)
+            progress_obj = ProgressWithTime(getattr(self, total), same_line, length, fill, empty)
 
             generator = func(self, *args, **kwargs)
-            progress_obj.print()
+            progress_obj.print(same_line=False)
             try:
                 times = []
                 while True:

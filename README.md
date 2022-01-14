@@ -10,9 +10,12 @@ To wrap a function with spinner, there is no need to modify function in any way,
 
 ## Examples
 Simplest progress bar:
+
 ```python
-from progress import progress
+
+from progress.classes import progress
 import time
+
 
 @progress(total=50)
 def example_progress():
@@ -33,8 +36,11 @@ def example_progress():
 ```
 
 Simplest spinner:
+
 ```python
-from progress import spinner
+
+from progress.classes import spinner
+
 
 @spinner
 def example_spinner():
@@ -50,8 +56,11 @@ def example_spinner_with_time():
 
 
 Progress bar on class method with total as self attribute
+
 ```python
-from progress.classmethod import progress as class_progress
+
+from progress.classes import progress as class_progress
+
 
 class ExampleClassMethod:
     def __init__(self):

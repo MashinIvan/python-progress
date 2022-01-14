@@ -1,17 +1,17 @@
-from progress.progress import Progress, ProgressWithTime
-from progress.spinner import Spinner, SpinnerWithTimer
-
 import functools
 import threading
 import typing
 import time
+
+from progress.classes.progress import Progress, ProgressWithTime
+from progress.classes.spinner import Spinner, SpinnerWithTimer
 
 
 def progress(
         *,
         total: int,
         estimate_time: bool = False,
-        end: str = '\r',
+        same_line: bool = True,
         length: int = 30,
         fill: str = '#',
         empty: str = ' ',
@@ -26,7 +26,7 @@ def progress(
         @functools.wraps(func)
         def wrapper_default(*args, **kwargs) -> typing.Any:
             generator = func(*args, **kwargs)
-            progress_obj.print()
+            progress_obj.print(same_line=False)
             try:
                 while True:
                     increment = next(generator)
@@ -36,13 +36,13 @@ def progress(
 
                     progress_obj.print()
             except StopIteration as result:
-                progress_obj.print(end='\n')
+                progress_obj.print()
                 return result.value
 
         @functools.wraps(func)
         def wrapper_time_estimate(*args, **kwargs) -> typing.Any:
             generator = func(*args, **kwargs)
-            progress_obj.print()
+            progress_obj.print(same_line=False)
             try:
                 times = []
                 while True:
@@ -60,14 +60,14 @@ def progress(
                     progress_obj.print()
 
             except StopIteration as result:
-                progress_obj.print(end='\n')
+                progress_obj.print()
                 return result.value
 
         if estimate_time:
-            progress_obj = ProgressWithTime(total, end, length, fill, empty)
+            progress_obj = ProgressWithTime(total, same_line, length, fill, empty)
             return wrapper_time_estimate
 
-        progress_obj = Progress(total, end, length, fill, empty)
+        progress_obj = Progress(total, same_line, length, fill, empty)
         return wrapper_default
 
     return decorator
@@ -76,7 +76,7 @@ def progress(
 def spinner(
         symbols: typing.List[str] = ('\\', '|', '/', '—'),
         execution_time: bool = False,
-        end: str = '\r'
+        same_line: bool = True,
 ) -> typing.Callable:
     def decorator(func: typing.Callable) -> typing.Callable:
 
@@ -86,20 +86,18 @@ def spinner(
             spinner_thread.start()
             ret = func(*args, **kwargs)
             progress_obj.finish()
-            print(end='\n')
 
             return ret
 
         if execution_time:
-            progress_obj = SpinnerWithTimer(symbols, end)
+            progress_obj = SpinnerWithTimer(symbols, same_line)
         else:
-            progress_obj = Spinner(symbols, end)
+            progress_obj = Spinner(symbols, same_line)
         return wrapper_default
 
     if callable(symbols):
         function = symbols
         symbols = ('\\', '|', '/', '—')
-        end = '\r'
         return decorator(function)
 
     return decorator

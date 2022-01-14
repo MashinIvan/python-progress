@@ -1,5 +1,4 @@
-from progress.decorators import progress, spinner
-from classmethod.decorators import progress as class_progress
+from progress import progress, spinner, class_progress
 import time
 
 

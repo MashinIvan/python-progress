@@ -1,29 +1,34 @@
 import dataclasses
 import typing
 
+from progress.logger import get_logger
+
+
+logger = get_logger()
+
 
 @dataclasses.dataclass
 class Progress:
     total: int
 
-    end: str
+    same_line: bool
     length: int
     fill: str
     empty: str
 
-    _format = "[{fill}{empty}] {percent:.2f}%"
+    _format = "{prefix}[{fill}{empty}] {percent:.2f}%"
     _current: int = 0
 
-    def print(self, end: str = None) -> None:
-        if not end:
-            end = self.end
-        print(
+    def print(self, same_line: bool = None) -> None:
+        if same_line is None:
+            same_line = self.same_line
+        logger.info(
             self._format.format(
+                prefix="\r" if same_line else "\n",
                 fill=self._fill_number*self.fill,
                 empty=self._empty_number*self.empty,
                 percent=self._percent * 100,
             ),
-            end=end
         )
 
     def increment(self, value: int) -> None:
@@ -45,19 +50,19 @@ class Progress:
 @dataclasses.dataclass
 class ProgressWithTime(Progress):
     _remaining_time: str = '—'
-    _format = "[{fill}{empty}] {percent:.2f}% | approximated time: {time}"
+    _format = "{prefix}[{fill}{empty}] {percent:.2f}% | approximated time: {time}"
 
-    def print(self, end: str = None) -> None:
-        if not end:
-            end = self.end
-        print(
+    def print(self, same_line: bool = None) -> None:
+        if same_line is None:
+            same_line = self.same_line
+        logger.info(
             self._format.format(
+                prefix="\r" if same_line else "\n",
                 fill=self._fill_number*self.fill,
                 empty=self._empty_number*self.empty,
                 percent=self._percent * 100,
                 time=self._remaining_time,
             ),
-            end=end,
         )
 
     def calculate_remaining_time(self, times: typing.List[float]) -> None:
